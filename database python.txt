@@ -1,0 +1,36 @@
+import mysql.connector
+from mysql.connector import Error
+
+def create_database(db_name):
+    try:
+        # 1. Connect to the MySQL Server
+        # Replace 'password' with your actual MySQL root password
+        connection = mysql.connector.connect(
+            host='localhost',
+            user='root',
+            password='your_password' 
+        )
+
+        if connection.is_connected():
+            cursor = connection.cursor()
+            
+            # 2. Create the Database
+            # 'IF NOT EXISTS' prevents errors if the DB already exists
+            query = f"CREATE DATABASE IF NOT EXISTS {db_name}"
+            cursor.execute(query)
+            
+            print(f"Success: Database '{db_name}' is ready.")
+
+    except Error as e:
+        # 3. Problem Handling (Error catching)
+        print(f"Error while connecting to MySQL: {e}")
+
+    finally:
+        # 4. Close the connection
+        if 'connection' in locals() and connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("MySQL connection is closed.")
+
+# Run the function
+create_database("leetcode_tracker")
